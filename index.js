@@ -1,6 +1,10 @@
 /* jshint node: true */
 'use strict';
 
+var path = require('path');
+var Funnel = require('broccoli-funnel');
+var MergeTrees = require('broccoli-merge-trees');
+
 module.exports = {
   name: 'ember-cli-selectize',
   included: function(app) {
@@ -30,11 +34,22 @@ module.exports = {
     if (process.env.EMBER_CLI_FASTBOOT !== 'true') {
       //import theme based on options
       if (options.theme) {
-        app.import(app.bowerDirectory + '/selectize/dist/css/selectize.' + options.theme + '.css');
+        app.import(`vendor/selectize/css/selectize.${options.theme}.css`);
       }
 
       //import javascript
-      app.import(app.bowerDirectory + '/selectize/dist/js/standalone/selectize.js');
+      this.import(`vendor/selectize/js/standalone/selectize.js`);
     }
+  },
+
+  treeForVendor: function(vendorTree) {
+    var selectizeTree = new Funnel(path.dirname(require.resolve('selectize')).replace('/js', ''), {
+      destDir: 'selectize',
+      include: [
+        'css/*',
+        'js/standalone/selectize.js'
+      ],
+    });
+    return vendorTree ? new MergeTrees([vendorTree, selectizeTree]) : selectizeTree;
   }
 };
