@@ -298,7 +298,7 @@ export default Component.extend({
 
     // allow the observers and computed properties to run first
     run.schedule('actions', this, function() {
-      this.sendAction('create-item', input);
+      this.send('create-item', input);
     });
     // We cancel the creation here, so it's up to you to include the created element
     // in the content and selection property
@@ -312,7 +312,7 @@ export default Component.extend({
     return run.bind(this, function() {
       var args = Array.prototype.slice.call(arguments);
       args.unshift(action);
-      this.sendAction.apply(this, args);
+      this.send.apply(this, args);
     });
   },
 
@@ -322,7 +322,7 @@ export default Component.extend({
   _onType(str) {
     this.set('filter', str);
     run.schedule('actions', this, function() {
-      this.sendAction('update-filter', str);
+      this.send('update-filter', str);
     });
   },
 
@@ -388,8 +388,8 @@ export default Component.extend({
     // allow the observers and computed properties to run first
     run.schedule('actions', this, function() {
       var value = this.get('value');
-      this.sendAction('select-item', selection, value);
-      this.sendAction('select-value', value);
+      this.send('select-item', selection, value);
+      this.send('select-value', value);
     });
   },
 
@@ -399,8 +399,8 @@ export default Component.extend({
     this.get('selection').addObject(obj);
 
     run.schedule('actions', this, function() {
-      this.sendAction('add-item', obj);
-      this.sendAction('add-value', val);
+      this.send('add-item', obj);
+      this.send('add-value', val);
     });
   },
 
@@ -410,8 +410,8 @@ export default Component.extend({
     this.get('selection').removeObject(obj);
 
     run.schedule('actions', this, function() {
-      this.sendAction('remove-item', obj);
-      this.sendAction('remove-value', val);
+      this.send('remove-item', obj);
+      this.send('remove-value', val);
     });
   },
 
